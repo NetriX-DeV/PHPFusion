@@ -157,8 +157,14 @@ class Requirements extends InstallCore {
         $requirements['php_extensions']['title'] = self::$locale['setup_0052'];
 
         // Check to see if OPcache is installed.
-        // $requirements['php_opcache']
-        $opcache_enabled = (function_exists('opcache_get_status') && opcache_get_status()['opcache_enabled']);
+        if (function_exists('opcache_get_status')) {
+            $opcache_status = opcache_get_status();
+        } else {
+            $opcache_status = false;
+        }
+
+        $opcache_enabled = is_array($opcache_status) && !empty($opcache_status['opcache_enabled']);
+
         if (!$opcache_enabled) {
             $requirements['php_opcache'] = [
                 'value'        => self::$locale['setup_0115a'],
@@ -168,7 +174,9 @@ class Requirements extends InstallCore {
         } else {
             $requirements['php_opcache']['value'] = self::$locale['setup_0115'];
         }
+
         $requirements['php_opcache']['title'] = self::$locale['setup_0053'];
+
 
         // Test for PDO (database). Making sure PDO is available
         // $requirements['database_extensions']

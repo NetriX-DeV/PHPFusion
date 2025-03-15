@@ -200,10 +200,13 @@ class InstallCore extends Infusions {
             print self::$locale['setup_0006'];
             exit;
         }
-        if (function_exists( 'opcache_get_status' ) && opcache_get_status()['opcache_enabled'] && !ini_get( 'opcache.save_comments' )) {
+        if (function_exists('opcache_get_status')) {
+        $opcache_status = opcache_get_status();
+        if ($opcache_status && isset($opcache_status['opcache_enabled']) && $opcache_status['opcache_enabled'] && !ini_get('opcache.save_comments')) {
             print self::$locale['setup_0007'];
             exit();
         }
+    }
     }
 
     /**
